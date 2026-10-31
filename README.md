@@ -1,4 +1,4 @@
-# CyberRig Inventory
+# cyberhesa Inventory
 
 Sistem Manajemen Inventaris & Kategori Toko Komputer. Proyek UTS Pemrograman Web Tingkat Mahir (PG184), dibangun dengan Laravel (MVC), Eloquent ORM relasi One-to-Many, Blade Templating, dan Tailwind CSS via Play CDN.
 
