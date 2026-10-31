@@ -14,38 +14,45 @@
 
     {{-- Breadcrumb --}}
     <nav class="mb-6 flex items-center gap-2 text-xs" aria-label="Breadcrumb">
-        <a href="{{ route('categories.index') }}" class="text-slate-400 hover:text-slate-200 transition">Overview</a>
+        <a href="{{ route('categories.index') }}" class="text-slate-500 hover:text-[#0d47a1] transition-all duration-200">Overview</a>
         <span class="text-slate-400">/</span>
-        <span class="text-slate-400">Rak</span>
+        <span class="text-slate-500">Rak</span>
         <span class="text-slate-400">/</span>
-        <span class="text-slate-200">{{ $category->nama_kategori }}</span>
+        <span class="text-[#0d47a1] font-medium">{{ $category->nama_kategori }}</span>
     </nav>
 
     {{-- 3 Kartu Ringkasan --}}
     <section class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
 
-        <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-6 shadow-sm">
-            <p class="text-xs font-medium text-slate-300">Info Rak</p>
-            <p class="text-2xl font-mono font-bold text-white mt-1 mb-2 uppercase">{{ $category->kode_rak }}</p>
-            <p class="text-xs text-slate-300 leading-relaxed">{{ $category->deskripsi ?? 'Belum ada deskripsi.' }}</p>
+        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <p class="text-xs font-medium text-slate-600">Info Rak</p>
+            <p class="text-2xl font-mono font-bold text-[#0d47a1] mt-1 mb-2 uppercase">{{ $category->kode_rak }}</p>
+            <p class="text-xs text-slate-600 leading-relaxed">{{ $category->deskripsi ?? 'Belum ada deskripsi.' }}</p>
         </div>
 
-        <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-6 shadow-sm">
-            <p class="text-xs font-medium text-slate-300">Total SKU &amp; Unit</p>
-            <div class="border border-slate-600/80 bg-[#0f172a] rounded-lg p-3 my-3">
-                <p class="font-mono text-sm text-white">{{ $totalSku }} Jenis Komponen</p>
-                <p class="font-mono text-[11px] text-slate-400 mt-0.5">{{ $totalUnit }} unit fisik tersedia</p>
+        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <p class="text-xs font-medium text-slate-600">Total SKU &amp; Unit</p>
+            <div class="border border-blue-200 bg-[#e3f2fd] rounded-lg p-3 my-3">
+                <p class="font-mono text-sm text-[#0d47a1]">{{ $totalSku }} Jenis Komponen</p>
+                <p class="font-mono text-[11px] text-slate-600 mt-0.5">{{ $totalUnit }} unit fisik tersedia</p>
             </div>
-            <p class="font-mono text-[11px] {{ $stokMenipis > 0 ? 'text-amber-400' : 'text-emerald-400' }}">
-                {{ $stokMenipis > 0 ? $stokMenipis . ' SKU stok menipis' : 'Semua stok aman' }}
+            <p class="font-mono text-[11px] font-semibold {{ $stokMenipis > 0 ? 'text-amber-600' : 'text-emerald-600' }}">
+                @if ($stokMenipis > 0)
+                    <span class="inline-flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+                        {{ $stokMenipis . ' SKU stok menipis' }}
+                    </span>
+                @else
+                    Semua stok aman
+                @endif
             </p>
         </div>
 
-        <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-6 shadow-sm">
-            <p class="text-xs font-medium text-slate-300">Total Valuasi Rak</p>
-            <p class="text-2xl font-mono font-bold text-white mt-1 mb-5">{{ 'Rp ' . number_format($nilaiAset, 0, ',', '.') }}</p>
+        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <p class="text-xs font-medium text-slate-600">Total Valuasi Rak</p>
+            <p class="text-2xl font-mono font-bold text-[#0d47a1] mt-1 mb-5">{{ 'Rp ' . number_format($nilaiAset, 0, ',', '.') }}</p>
             <a href="{{ route('items.create', ['category_id' => $category->id]) }}"
-               class="bg-[#a5c4ff] hover:bg-[#8eb4ff] text-[#0f172a] font-semibold text-xs px-4 py-2 rounded-lg transition inline-flex items-center gap-1.5">
+               class="bg-[#2196f3] hover:bg-blue-600 active:scale-[0.98] text-white font-medium shadow-sm text-xs px-4 py-2 rounded-lg transition-all duration-200 inline-flex items-center gap-1.5">
                 <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4"
                      stroke-linecap="round" aria-hidden="true">
                     <path d="M10 4v12M4 10h12"/>
@@ -69,53 +76,62 @@
             </span>
             <input type="search" id="table-search" data-target="komponen-table" autocomplete="off"
                    placeholder="Cari komponen..."
-                   class="w-full bg-[#0f172a] border border-slate-600/80 text-slate-100 placeholder-slate-400 rounded-lg pl-9 pr-3 py-2 text-xs focus:border-[#a5c4ff] focus:outline-none">
+                   class="w-full bg-white border border-blue-200 text-slate-700 placeholder-slate-400 rounded-lg pl-9 pr-3 py-2 text-xs focus:border-[#2196f3] focus:outline-none focus:ring-2 focus:ring-blue-100">
         </div>
     </div>
 
-    <p class="mb-3 font-mono text-[11px] text-slate-400">
+    <p class="mb-3 font-mono text-[11px] text-slate-500">
         <span id="row-count">{{ $totalSku }}</span> / {{ $totalSku }} BARIS
     </p>
 
-    {{-- Tabel Borderless Minimalis --}}
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse" id="komponen-table">
-            <thead>
-                <tr class="text-[11px] text-slate-400 font-medium border-b border-slate-700/70">
-                    <th scope="col" class="pb-2.5 pr-4 font-medium">Kode SKU</th>
-                    <th scope="col" class="pb-2.5 pr-4 font-medium">Merk</th>
-                    <th scope="col" class="pb-2.5 pr-4 font-medium">Nama Komponen</th>
-                    <th scope="col" class="pb-2.5 pr-4 font-medium text-right">Stok</th>
-                    <th scope="col" class="pb-2.5 font-medium text-right">Harga Satuan</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-700/60 text-xs">
-                @forelse ($category->items as $item)
-                    <tr class="hover:bg-slate-800/60 transition" data-search-row>
-                        <td class="py-3.5 pr-4 font-mono text-slate-200 align-top">{{ $item->kode_sku }}</td>
-                        <td class="py-3.5 pr-4 font-mono text-[11px] uppercase text-sky-400 align-top">{{ $item->merk }}</td>
-                        <td class="py-3.5 pr-4 text-slate-100 align-top">{{ $item->nama_barang }}</td>
-                        <td class="py-3.5 pr-4 font-mono text-right align-top {{ $item->stok <= 5 ? 'text-amber-400' : 'text-emerald-400' }}">
-                            {{ $item->stok }}
-                        </td>
-                        <td class="py-3.5 font-mono text-emerald-400 text-right align-top">
-                            {{ 'Rp ' . number_format($item->harga, 0, ',', '.') }}
+    {{-- Tabel di dalam kartu putih --}}
+    <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse" id="komponen-table">
+                <thead class="bg-blue-50/80">
+                    <tr class="text-[11px] text-blue-900 font-semibold border-b border-blue-100">
+                        <th scope="col" class="py-2.5 px-3 font-semibold">Kode SKU</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold">Merk</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold">Nama Komponen</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold text-right">Stok</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold text-right">Harga Satuan</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-blue-100 text-xs">
+                    @forelse ($category->items as $item)
+                        <tr class="transition-colors duration-150 hover:bg-blue-50/70" data-search-row>
+                            <td class="py-3.5 px-3 font-mono text-slate-700 align-top">{{ $item->kode_sku }}</td>
+                            <td class="py-3.5 px-3 font-mono text-[11px] uppercase text-blue-700 align-top">{{ $item->merk }}</td>
+                            <td class="py-3.5 px-3 text-slate-700 align-top">{{ $item->nama_barang }}</td>
+                            <td class="py-3.5 px-3 font-mono font-semibold text-right align-top {{ $item->stok <= 5 ? 'text-amber-600' : 'text-emerald-600' }}">
+                                @if ($item->stok <= 5)
+                                    <span class="inline-flex items-center gap-1.5 justify-end">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+                                        {{ $item->stok }}
+                                    </span>
+                                @else
+                                    {{ $item->stok }}
+                                @endif
+                            </td>
+                            <td class="py-3.5 px-3 font-mono font-semibold text-emerald-700 text-right align-top">
+                                {{ 'Rp ' . number_format($item->harga, 0, ',', '.') }}
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="py-10 text-center text-slate-500">
+                                Rak ini belum memiliki komponen.
+                            </td>
+                        </tr>
+                    @endforelse
+                    <tr id="no-result-row" class="hidden">
+                        <td colspan="5" class="py-10 text-center text-slate-500">
+                            Tidak ada komponen yang cocok.
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="py-10 text-center text-slate-400">
-                            Rak ini belum memiliki komponen.
-                        </td>
-                    </tr>
-                @endforelse
-                <tr id="no-result-row" class="hidden">
-                    <td colspan="5" class="py-10 text-center text-slate-400">
-                        Tidak ada komponen yang cocok.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>

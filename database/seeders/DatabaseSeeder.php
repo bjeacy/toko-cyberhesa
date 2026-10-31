@@ -28,8 +28,8 @@ class DatabaseSeeder extends Seeder
                 'kode_rak' => 'RAK-B2',
                 'deskripsi' => 'Kartu grafis untuk gaming, rendering, dan komputasi.',
                 'items' => [
-                    ['kode_sku' => 'VGA-ASU-4060', 'nama_barang' => 'ASUS Dual GeForce RTX 4060 8GB', 'merk' => 'ASUS', 'stok' => 5, 'harga' => 5250000],
-                    ['kode_sku' => 'VGA-SAP-7800', 'nama_barang' => 'Sapphire PULSE Radeon RX 7800 XT 16GB', 'merk' => 'Sapphire', 'stok' => 3, 'harga' => 8750000],
+                    ['kode_sku' => 'VGA-ASU-4060', 'nama_barang' => 'ASUS Dual GeForce RTX 4060 8GB', 'merk' => 'ASUS', 'stok' => 10, 'harga' => 5250000],
+                    ['kode_sku' => 'VGA-SAP-7800', 'nama_barang' => 'Sapphire PULSE Radeon RX 7800 XT 16GB', 'merk' => 'Sapphire', 'stok' => 12, 'harga' => 8750000],
                 ],
             ],
             [
@@ -48,8 +48,9 @@ class DatabaseSeeder extends Seeder
                 'deskripsi' => 'Periferal gaming: mouse, keyboard, dan headset.',
                 'items' => [
                     ['kode_sku' => 'GR-LOG-G502', 'nama_barang' => 'Logitech G502 Hero Gaming Mouse', 'merk' => 'Logitech', 'stok' => 25, 'harga' => 620000],
-                    ['kode_sku' => 'GR-RZR-BWKV3', 'nama_barang' => 'Razer BlackWidow V3 Mechanical Keyboard', 'merk' => 'Razer', 'stok' => 4, 'harga' => 1450000],
+                    ['kode_sku' => 'GR-RZR-BWKV3', 'nama_barang' => 'Razer BlackWidow V3 Mechanical Keyboard', 'merk' => 'Razer', 'stok' => 15, 'harga' => 1450000],
                     ['kode_sku' => 'GR-HYP-CL2', 'nama_barang' => 'HyperX Cloud II Gaming Headset', 'merk' => 'HyperX', 'stok' => 11, 'harga' => 1280000],
+                    ['kode_sku' => 'GR-LOGITECH-SUPERLIGHT', 'nama_barang' => 'Logitech GPRO Superlight', 'merk' => 'Logitech', 'stok' => 6, 'harga' => 1000000],
                 ],
             ],
         ];

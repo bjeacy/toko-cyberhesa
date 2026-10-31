@@ -15,52 +15,36 @@
     {{-- BAGIAN 1: 3 Kartu Utama --}}
     <section class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
 
-        <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-6 shadow-sm">
-            <p class="text-xs font-medium text-slate-300">Total Valuasi Inventaris</p>
-            <p class="text-2xl font-mono font-bold text-white mt-1 mb-5">{{ 'Rp ' . number_format($totalNilai, 0, ',', '.') }}</p>
-            <a href="{{ route('items.create') }}"
-               class="bg-[#a5c4ff] hover:bg-[#8eb4ff] text-[#0f172a] font-semibold text-xs px-4 py-2 rounded-lg transition inline-flex items-center gap-1.5">
-                <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4"
-                     stroke-linecap="round" aria-hidden="true">
-                    <path d="M10 4v12M4 10h12"/>
-                </svg>
-                Input Komponen
-            </a>
+        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 text-center flex flex-col items-center justify-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <p class="text-xs font-medium text-slate-600">Total Valuasi Inventaris</p>
+            <p class="text-2xl font-mono font-bold text-[#0d47a1] mt-1">{{ 'Rp ' . number_format($totalNilai, 0, ',', '.') }}</p>
         </div>
 
-        <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-6 shadow-sm">
-            <p class="text-xs font-medium text-slate-300">Ringkasan Penyimpanan</p>
-            <div class="border border-slate-600/80 bg-[#0f172a] rounded-lg p-3 my-3">
-                <p class="font-mono text-sm text-white">{{ $categories->count() }} Kategori Rak Aktif</p>
-                <p class="font-mono text-[11px] text-slate-400 mt-0.5">Total {{ $totalSku }} Jenis SKU Terdaftar</p>
+        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 text-center flex flex-col items-center justify-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <p class="text-xs font-medium text-slate-600">Ringkasan Penyimpanan</p>
+            <div class="border border-blue-200 bg-[#e3f2fd] rounded-lg p-3 mt-3 w-full">
+                <p class="font-mono text-sm text-[#0d47a1]">{{ $categories->count() }} Kategori Rak Aktif</p>
+                <p class="font-mono text-[11px] text-slate-600 mt-0.5">Total {{ $totalSku }} Jenis SKU Terdaftar</p>
             </div>
-            <a href="{{ route('items.index') }}"
-               class="bg-transparent hover:bg-slate-700/60 text-slate-200 border border-slate-600/80 font-medium text-xs px-3.5 py-2 rounded-lg transition inline-flex items-center gap-1.5">
-                Lihat Semua Barang
-                <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M4 10h11M10.5 5.5L15 10l-4.5 4.5"/>
-                </svg>
-            </a>
         </div>
 
-        <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-6 shadow-sm">
-            <p class="text-xs font-medium text-slate-300">
+        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 text-center flex flex-col items-center justify-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <p class="text-xs font-medium text-slate-600 flex items-center justify-center gap-1">
                 Monitoring Stok
-                <span class="bg-slate-700 text-slate-200 text-[10px] font-mono px-1.5 py-0.5 rounded ml-1">ACTIVE</span>
+                <span class="bg-[#2196f3] text-white text-[10px] font-mono px-1.5 py-0.5 rounded">ACTIVE</span>
             </p>
-            <p class="text-xs text-slate-300 leading-relaxed my-3">
-                Terdapat <span class="font-mono text-white">{{ $totalUnit }} unit tersedia</span> di seluruh rak.
+            <p class="text-xs text-slate-600 leading-relaxed mt-3">
+                Terdapat <span class="font-mono font-semibold text-[#0d47a1]">{{ $totalUnit }} unit tersedia</span> di seluruh rak.
                 @if ($stokMenipis > 0)
-                    <span class="text-amber-400 font-mono">{{ $stokMenipis }} SKU</span> perlu segera ditambah stoknya.
+                    <span class="inline-flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+                        <span class="text-amber-600 font-mono font-semibold">{{ $stokMenipis }} SKU</span>
+                    </span>
+                    perlu segera ditambah stoknya.
                 @else
                     Seluruh SKU berada pada level stok aman.
                 @endif
             </p>
-            <a href="{{ route('items.create') }}"
-               class="bg-[#a5c4ff] hover:bg-[#8eb4ff] text-[#0f172a] font-semibold text-xs px-4 py-2 rounded-lg transition inline-flex items-center gap-1.5">
-                Tambah Stok
-            </a>
         </div>
 
     </section>
@@ -68,8 +52,8 @@
     {{-- BAGIAN 1b: Grid 4 Kartu KPI Berikon --}}
     <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 
-        <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-4 flex items-center gap-3 shadow-sm">
-            <span class="w-9 h-9 shrink-0 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center">
+        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-4 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <span class="w-9 h-9 shrink-0 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-200 flex items-center justify-center">
                 <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M10 2.5l6.5 3.5v8L10 17.5 3.5 14V6L10 2.5z"/>
@@ -77,13 +61,13 @@
                 </svg>
             </span>
             <div class="min-w-0">
-                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-400">Total Jenis SKU</p>
-                <p class="font-mono text-lg font-bold text-white">{{ $totalSku }}</p>
+                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Total Jenis SKU</p>
+                <p class="font-mono text-lg font-bold text-[#0d47a1]">{{ $totalSku }}</p>
             </div>
         </div>
 
-        <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-4 flex items-center gap-3 shadow-sm">
-            <span class="w-9 h-9 shrink-0 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center">
+        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-4 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <span class="w-9 h-9 shrink-0 rounded-lg bg-sky-50 text-sky-600 border border-sky-200 flex items-center justify-center">
                 <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <ellipse cx="10" cy="5" rx="6" ry="2.5"/>
@@ -92,13 +76,13 @@
                 </svg>
             </span>
             <div class="min-w-0">
-                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-400">Total Stok Fisik</p>
-                <p class="font-mono text-lg font-bold text-white">{{ $totalUnit }}</p>
+                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Total Stok Fisik</p>
+                <p class="font-mono text-lg font-bold text-[#0d47a1]">{{ $totalUnit }}</p>
             </div>
         </div>
 
-        <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-4 flex items-center gap-3 shadow-sm">
-            <span class="w-9 h-9 shrink-0 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center">
+        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-4 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <span class="w-9 h-9 shrink-0 rounded-lg bg-teal-50 text-teal-600 border border-teal-200 flex items-center justify-center">
                 <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M3 3h14v14H3z"/>
@@ -106,13 +90,13 @@
                 </svg>
             </span>
             <div class="min-w-0">
-                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-400">Total Kategori Rak</p>
-                <p class="font-mono text-lg font-bold text-white">{{ $categories->count() }}</p>
+                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Total Kategori Rak</p>
+                <p class="font-mono text-lg font-bold text-[#0d47a1]">{{ $categories->count() }}</p>
             </div>
         </div>
 
-        <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-4 flex items-center gap-3 shadow-sm">
-            <span class="w-9 h-9 shrink-0 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center">
+        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-4 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <span class="w-9 h-9 shrink-0 rounded-lg bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center">
                 <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M10 3l7 12H3l7-12z"/>
@@ -120,68 +104,220 @@
                 </svg>
             </span>
             <div class="min-w-0">
-                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-400">Stok Menipis (&le;5)</p>
-                <p class="font-mono text-lg font-bold text-white">{{ $stokMenipis }}</p>
+                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                    @if ($stokMenipis > 0)
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+                    @endif
+                    Stok Menipis (&le;5)
+                </p>
+                <p class="font-mono text-lg font-bold text-[#0d47a1]">{{ $stokMenipis }}</p>
             </div>
         </div>
 
     </section>
 
     {{-- BAGIAN 3: Tabs + Tabel --}}
-    <div class="border-b border-slate-700/70 mb-5 flex gap-6 text-xs font-medium">
-        <span class="text-white border-b-2 border-[#a5c4ff] pb-2.5">Daftar Kategori &amp; Rak</span>
-        <a href="{{ route('items.index') }}" class="text-slate-400 hover:text-slate-200 pb-2.5 transition">Semua Komponen</a>
+    @php
+        // Semua item sudah termuat lewat eager loading $categories->items,
+        // jadi tidak perlu query baru dan controller tidak perlu diubah.
+        // Relasi category disetel manual agar $item->category tidak lazy load.
+        $semuaItem = $categories->flatMap(function ($c) {
+            return $c->items->each->setRelation('category', $c);
+        })->sortByDesc('id')->values();
+    @endphp
+
+    <div class="border-b border-blue-200 mb-5 flex gap-6 text-xs font-medium" role="tablist">
+        <button type="button" id="tab-btn-kategori" data-tab="kategori" role="tab" aria-selected="true"
+                aria-controls="panel-kategori"
+                class="tab-btn tab-on text-[#0d47a1] border-b-2 border-[#2196f3] pb-2.5 transition-all duration-200 hover:text-[#2196f3]">
+            Kategori
+        </button>
+        <button type="button" id="tab-btn-komponen" data-tab="komponen" role="tab" aria-selected="false"
+                aria-controls="panel-komponen"
+                class="tab-btn text-slate-500 hover:text-[#0d47a1] pb-2.5 border-b-2 border-transparent transition-all duration-200">
+            Semua Komponen
+        </button>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="text-[11px] text-slate-400 font-medium border-b border-slate-700/70">
-                    <th scope="col" class="pb-2.5 pr-4 font-medium">Kode Rak</th>
-                    <th scope="col" class="pb-2.5 pr-4 font-medium">Kategori</th>
-                    <th scope="col" class="pb-2.5 pr-4 font-medium">Deskripsi Komponen</th>
-                    <th scope="col" class="pb-2.5 pr-4 font-medium text-right">Jumlah SKU</th>
-                    <th scope="col" class="pb-2.5 pr-4 font-medium text-right">Total Unit</th>
-                    <th scope="col" class="pb-2.5 font-medium text-right">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-700/60 text-xs">
-                @forelse ($categories as $category)
-                    <tr class="hover:bg-slate-800/60 transition">
-                        <td class="py-3.5 pr-4 font-mono text-[11px] text-sky-400 uppercase align-top">{{ $category->kode_rak }}</td>
-                        <td class="py-3.5 pr-4 align-top">
-                            <a href="{{ route('categories.show', $category->id) }}"
-                               class="inline-flex items-center gap-1 font-medium text-slate-100 hover:text-white transition">
-                                <svg class="h-3 w-3 text-slate-400" viewBox="0 0 20 20" fill="none" stroke="currentColor"
-                                     stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M8 5.5L12.5 10 8 14.5"/>
-                                </svg>
-                                {{ $category->nama_kategori }}
-                            </a>
-                        </td>
-                        <td class="py-3.5 pr-4 text-slate-300 max-w-md align-top">
-                            {{ $category->deskripsi ?? 'Belum ada deskripsi.' }}
-                        </td>
-                        <td class="py-3.5 pr-4 font-mono text-slate-100 text-right align-top">{{ $category->items_count }}</td>
-                        <td class="py-3.5 pr-4 font-mono text-right align-top
-                                   {{ $category->items->sum('stok') > 5 ? 'text-emerald-400' : 'text-amber-400' }}">
-                            {{ $category->items->sum('stok') }}
-                        </td>
-                        <td class="py-3.5 text-right align-top">
-                            <a href="{{ route('categories.show', $category->id) }}"
-                               class="text-slate-300 hover:text-white transition whitespace-nowrap">
-                                Buka Rak &rarr;
-                            </a>
-                        </td>
+    {{-- Panel 1: Tabel Kategori --}}
+    <div id="panel-kategori" role="tabpanel" aria-labelledby="tab-btn-kategori"
+         class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 opacity-100 transition-opacity duration-300">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-blue-50/80">
+                    <tr class="text-[11px] text-blue-900 font-semibold border-b border-blue-100">
+                        <th scope="col" class="py-2.5 px-3 font-semibold">Kode Rak</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold">Kategori</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold">Deskripsi Komponen</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold text-right">Jumlah SKU</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold text-right">Total Unit</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold text-right">Aksi</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="py-10 text-center text-slate-400">
-                            Belum ada kategori pada database.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-blue-100 text-xs">
+                    @forelse ($categories as $category)
+                        <tr class="transition-colors duration-150 hover:bg-blue-50/70">
+                            <td class="py-3.5 px-3 font-mono text-[11px] text-blue-700 uppercase align-top">{{ $category->kode_rak }}</td>
+                            <td class="py-3.5 px-3 align-top">
+                                <a href="{{ route('categories.show', $category->id) }}"
+                                   class="inline-flex items-center gap-1 font-medium text-[#0d47a1] hover:text-[#2196f3] transition-all duration-200">
+                                    <svg class="h-3 w-3 text-slate-400" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                                         stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M8 5.5L12.5 10 8 14.5"/>
+                                    </svg>
+                                    {{ $category->nama_kategori }}
+                                </a>
+                            </td>
+                            <td class="py-3.5 px-3 text-slate-600 max-w-md align-top">
+                                {{ $category->deskripsi ?? 'Belum ada deskripsi.' }}
+                            </td>
+                            <td class="py-3.5 px-3 font-mono text-slate-700 text-right align-top">{{ $category->items_count }}</td>
+                            <td class="py-3.5 px-3 font-mono font-semibold text-right align-top
+                                       {{ $category->items->sum('stok') > 5 ? 'text-emerald-600' : 'text-amber-600' }}">
+                                @if ($category->items->sum('stok') <= 5)
+                                    <span class="inline-flex items-center gap-1.5 justify-end">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+                                        {{ $category->items->sum('stok') }}
+                                    </span>
+                                @else
+                                    {{ $category->items->sum('stok') }}
+                                @endif
+                            </td>
+                            <td class="py-3.5 px-3 text-right align-top">
+                                <a href="{{ route('categories.show', $category->id) }}"
+                                   class="text-[#2196f3] hover:text-blue-700 font-medium transition-all duration-200 whitespace-nowrap">
+                                    Buka Rak &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="py-10 text-center text-slate-500">
+                                Belum ada kategori pada database.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    {{-- Panel 2: Tabel Semua Komponen --}}
+    <div id="panel-komponen" role="tabpanel" aria-labelledby="tab-btn-komponen"
+         class="hidden bg-white border border-blue-100 shadow-sm rounded-xl p-6 opacity-0 transition-opacity duration-300">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-blue-50/80">
+                    <tr class="text-[11px] text-blue-900 font-semibold border-b border-blue-100">
+                        <th scope="col" class="py-2.5 px-3 font-semibold">Kode SKU</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold">Merk</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold">Nama Komponen</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold">Kategori / Rak</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold text-right">Stok</th>
+                        <th scope="col" class="py-2.5 px-3 font-semibold text-right">Harga Satuan</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-blue-100 text-xs">
+                    @forelse ($semuaItem as $item)
+                        <tr class="transition-colors duration-150 hover:bg-blue-50/70">
+                            <td class="py-3.5 px-3 font-mono text-slate-700 align-top">{{ $item->kode_sku }}</td>
+                            <td class="py-3.5 px-3 font-mono text-[11px] uppercase text-blue-700 align-top">{{ $item->merk }}</td>
+                            <td class="py-3.5 px-3 text-slate-700 align-top">{{ $item->nama_barang }}</td>
+                            <td class="py-3.5 px-3 align-top">
+                                <a href="{{ route('categories.show', $item->category_id) }}"
+                                   class="inline-flex items-center gap-1.5 text-[#0d47a1] hover:text-[#2196f3] transition-all duration-200">
+                                    <span>{{ $item->category->nama_kategori }}</span>
+                                    <span class="font-mono text-[10px] text-slate-500 uppercase">{{ $item->category->kode_rak }}</span>
+                                </a>
+                            </td>
+                            <td class="py-3.5 px-3 font-mono font-semibold text-right align-top {{ $item->stok <= 5 ? 'text-amber-600' : 'text-emerald-600' }}">
+                                @if ($item->stok <= 5)
+                                    <span class="inline-flex items-center gap-1.5 justify-end">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+                                        {{ $item->stok }}
+                                    </span>
+                                @else
+                                    {{ $item->stok }}
+                                @endif
+                            </td>
+                            <td class="py-3.5 px-3 font-mono font-semibold text-emerald-700 text-right align-top">
+                                {{ 'Rp ' . number_format($item->harga, 0, ',', '.') }}
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="py-10 text-center text-slate-500">
+                                Belum ada komponen pada database.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Tab penampil tabel: Kategori <-> Semua Komponen, tanpa pindah halaman.
+        // Panel lama di-fade-out dulu agar kedua tabel tidak tampil bertumpuk.
+        (function () {
+            var buttons = document.querySelectorAll('.tab-btn');
+            var panels = {
+                kategori: document.getElementById('panel-kategori'),
+                komponen: document.getElementById('panel-komponen')
+            };
+            if (!buttons.length) return;
+
+            var current = 'kategori';
+            var animating = false;
+
+            function reveal(el) {
+                el.classList.remove('hidden');
+                // Paksa reflow supaya transisi opacity benar-benar berjalan.
+                void el.offsetWidth;
+                el.classList.remove('opacity-0');
+                el.classList.add('opacity-100');
+            }
+
+            function conceal(el) {
+                el.classList.remove('opacity-100');
+                el.classList.add('opacity-0');
+            }
+
+            function syncButtons(name) {
+                buttons.forEach(function (btn) {
+                    var on = btn.dataset.tab === name;
+                    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+                    btn.classList.toggle('tab-on', on);
+                    btn.classList.toggle('text-[#0d47a1]', on);
+                    btn.classList.toggle('border-[#2196f3]', on);
+                    btn.classList.toggle('border-transparent', !on);
+                    btn.classList.toggle('text-slate-500', !on);
+                });
+            }
+
+            function show(name) {
+                var next = panels[name];
+                var prev = panels[current];
+                if (!next || name === current || animating) return;
+
+                animating = true;
+                syncButtons(name);
+
+                if (prev) conceal(prev);
+
+                window.setTimeout(function () {
+                    if (prev) prev.classList.add('hidden');
+                    reveal(next);
+                    current = name;
+                    animating = false;
+                }, 150);
+            }
+
+            buttons.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    show(btn.dataset.tab);
+                });
+            });
+        })();
+    </script>
 @endsection

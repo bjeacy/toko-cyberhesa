@@ -19,13 +19,23 @@
                         sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
                         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
                     },
+                    keyframes: {
+                        // Konten masuk dari bawah ke atas saat halaman dimuat.
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(0.5rem)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    },
+                    animation: {
+                        fadeIn: 'fadeIn 300ms ease-out both',
+                    },
                 },
             },
         };
     </script>
 </head>
-<body class="antialiased">
-    <div class="min-h-screen bg-[#0f172a] text-slate-200 flex">
+<body class="antialiased bg-[#e3f2fd]">
+    <div class="min-h-screen bg-[#e3f2fd] text-slate-700 flex">
 
         {{-- Left Sidebar --}}
         @include('partials.navbar')
@@ -34,32 +44,45 @@
         <div class="flex-1 flex flex-col min-w-0">
 
             {{-- Top Header --}}
-            <header class="shrink-0 bg-[#0d1526] border-b border-slate-700/70 px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+            <header class="shrink-0 bg-white border-b border-blue-200 px-8 py-3 flex flex-wrap items-center justify-between gap-3">
                 <div class="min-w-0">
-                    <h1 class="text-sm font-semibold text-white">@yield('header_title', 'Overview')</h1>
-                    <p class="text-[11px] text-slate-300 mt-0.5">@yield('header_subtitle', 'Ringkasan real-time pergerakan inventaris dan status stok komponen PC')</p>
+                    <h1 class="text-sm font-semibold text-[#0d47a1]">@yield('header_title', 'Overview')</h1>
+                    <p class="text-[11px] text-slate-600 mt-0.5">@yield('header_subtitle', 'Ringkasan real-time pergerakan inventaris dan status stok komponen PC')</p>
                 </div>
             </header>
 
-            <main class="p-8 max-w-6xl w-full">
+            <main class="p-8 max-w-6xl w-full animate-fadeIn">
 
                 @if (session('success'))
                     <div id="flash-success"
                          role="status"
-                         class="bg-[#1e293b] border border-emerald-500/40 text-emerald-300 text-xs px-4 py-3 rounded-lg mb-6 flex items-center justify-between gap-4">
+                         class="bg-white border border-emerald-300 text-emerald-700 text-xs px-4 py-3 rounded-xl shadow-sm mb-6 flex items-center justify-between gap-4 transition-opacity duration-300">
                         <p class="min-w-0 truncate">
                             <span class="font-semibold">Berhasil.</span>
                             {{ session('success') }}
                         </p>
                         <button type="button" onclick="document.getElementById('flash-success').remove()"
                                 aria-label="Tutup notifikasi"
-                                class="shrink-0 rounded p-0.5 text-emerald-400/70 transition hover:bg-emerald-500/10 hover:text-emerald-300">
+                                class="shrink-0 rounded p-0.5 text-emerald-600/70 transition-all duration-200 hover:bg-emerald-50 hover:text-emerald-700 active:scale-[0.98]">
                             <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"
                                  stroke-linecap="round" aria-hidden="true">
                                 <path d="M5 5l10 10M15 5L5 15"/>
                             </svg>
                         </button>
                     </div>
+
+                    <script>
+                        // Flash sukses hilang sendiri setelah 5 detik, tetap bisa ditutup manual.
+                        (function () {
+                            var el = document.getElementById('flash-success');
+                            if (!el) return;
+
+                            window.setTimeout(function () {
+                                el.classList.add('opacity-0');
+                                window.setTimeout(function () { el.remove(); }, 300);
+                            }, 5000);
+                        })();
+                    </script>
                 @endif
 
                 @yield('content')
