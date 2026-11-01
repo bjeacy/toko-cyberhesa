@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
                 'deskripsi' => 'CPU desktop dan workstation dari Intel serta AMD.',
                 'items' => [
                     ['kode_sku' => 'CPU-INT-13400F', 'nama_barang' => 'Intel Core i5-13400F', 'merk' => 'Intel', 'stok' => 12, 'harga' => 2850000],
-                    ['kode_sku' => 'CPU-AMD-7600', 'nama_barang' => 'AMD Ryzen 5 7600', 'merk' => 'AMD', 'stok' => 7, 'harga' => 3350000],
+                    ['kode_sku' => 'CPU-AMD-7600', 'nama_barang' => 'AMD Ryzen 5 7600', 'merk' => 'AMD', 'stok' => 4, 'harga' => 3350000],
                 ],
             ],
             [
@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
                     ['kode_sku' => 'GR-LOG-G502', 'nama_barang' => 'Logitech G502 Hero Gaming Mouse', 'merk' => 'Logitech', 'stok' => 25, 'harga' => 620000],
                     ['kode_sku' => 'GR-RZR-BWKV3', 'nama_barang' => 'Razer BlackWidow V3 Mechanical Keyboard', 'merk' => 'Razer', 'stok' => 15, 'harga' => 1450000],
                     ['kode_sku' => 'GR-HYP-CL2', 'nama_barang' => 'HyperX Cloud II Gaming Headset', 'merk' => 'HyperX', 'stok' => 11, 'harga' => 1280000],
-                    ['kode_sku' => 'GR-LOGITECH-SUPERLIGHT', 'nama_barang' => 'Logitech GPRO Superlight', 'merk' => 'Logitech', 'stok' => 6, 'harga' => 1000000],
+                    ['kode_sku' => 'GR-LOGITECH-SUPERLIGHT', 'nama_barang' => 'Logitech GPRO Superlight', 'merk' => 'Logitech', 'stok' => 3, 'harga' => 1000000],
                 ],
             ],
         ];

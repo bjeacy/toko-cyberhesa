@@ -63,8 +63,8 @@
 
     </section>
 
-    {{-- Toolbar: Search --}}
-    <div class="flex flex-wrap items-center justify-end gap-3 mb-4">
+    {{-- Toolbar: Search + Export --}}
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
 
         <div class="relative w-full sm:w-64">
             <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
@@ -74,10 +74,21 @@
                     <path d="M13.5 13.5L17 17"/>
                 </svg>
             </span>
-            <input type="search" id="table-search" data-target="komponen-table" autocomplete="off"
+            <input type="search" id="table-search" autocomplete="off"
                    placeholder="Cari komponen..."
                    class="w-full bg-white border border-blue-200 text-slate-700 placeholder-slate-400 rounded-lg pl-9 pr-3 py-2 text-xs focus:border-[#2196f3] focus:outline-none focus:ring-2 focus:ring-blue-100">
         </div>
+
+        <button type="button" id="csv-export" data-filename="stok-{{ $category->kode_rak }}"
+                class="bg-white hover:bg-blue-50 active:scale-[0.98] text-[#0d47a1] border border-blue-200 font-medium text-xs px-3.5 py-2 rounded-lg transition-all duration-200 inline-flex items-center gap-1.5">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M10 3v9"/>
+                <path d="M6.5 9L10 12.5 13.5 9"/>
+                <path d="M4 15.5h12"/>
+            </svg>
+            Unduh CSV
+        </button>
     </div>
 
     <p class="mb-3 font-mono text-[11px] text-slate-500">
@@ -87,19 +98,31 @@
     {{-- Tabel di dalam kartu putih --}}
     <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6">
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse" id="komponen-table">
+            <table class="w-full text-left border-collapse" id="komponen-table" data-table>
                 <thead class="bg-blue-50/80">
                     <tr class="text-[11px] text-blue-900 font-semibold border-b border-blue-100">
-                        <th scope="col" class="py-2.5 px-3 font-semibold">Kode SKU</th>
-                        <th scope="col" class="py-2.5 px-3 font-semibold">Merk</th>
-                        <th scope="col" class="py-2.5 px-3 font-semibold">Nama Komponen</th>
-                        <th scope="col" class="py-2.5 px-3 font-semibold text-right">Stok</th>
-                        <th scope="col" class="py-2.5 px-3 font-semibold text-right">Harga Satuan</th>
+                        <th scope="col" data-sort="sku" data-label="Kode SKU"
+                            class="py-2.5 px-3 font-semibold cursor-pointer select-none hover:text-[#2196f3] transition-all duration-200">
+                            Kode SKU <span data-arrow class="font-mono text-[9px]"></span>
+                        </th>
+                        <th scope="col" data-label="Merk" class="py-2.5 px-3 font-semibold">Merk</th>
+                        <th scope="col" data-label="Nama Komponen" class="py-2.5 px-3 font-semibold">Nama Komponen</th>
+                        <th scope="col" data-sort="stok" data-label="Stok"
+                            class="py-2.5 px-3 font-semibold text-right cursor-pointer select-none hover:text-[#2196f3] transition-all duration-200">
+                            Stok <span data-arrow class="font-mono text-[9px]"></span>
+                        </th>
+                        <th scope="col" data-sort="harga" data-label="Harga Satuan"
+                            class="py-2.5 px-3 font-semibold text-right cursor-pointer select-none hover:text-[#2196f3] transition-all duration-200">
+                            Harga Satuan <span data-arrow class="font-mono text-[9px]"></span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-blue-100 text-xs">
                     @forelse ($category->items as $item)
-                        <tr class="transition-colors duration-150 hover:bg-blue-50/70" data-search-row>
+                        <tr class="transition-colors duration-150 hover:bg-blue-50/70" data-search-row
+                            data-sortsku="{{ strtolower($item->kode_sku) }}"
+                            data-sortstok="{{ $item->stok }}"
+                            data-sortharga="{{ $item->harga }}">
                             <td class="py-3.5 px-3 font-mono text-slate-700 align-top">{{ $item->kode_sku }}</td>
                             <td class="py-3.5 px-3 font-mono text-[11px] uppercase text-blue-700 align-top">{{ $item->merk }}</td>
                             <td class="py-3.5 px-3 text-slate-700 align-top">{{ $item->nama_barang }}</td>
@@ -133,33 +156,4 @@
             </table>
         </div>
     </div>
-
-    <script>
-        // Pencarian instan pada tabel (tanpa reload).
-        (function () {
-            var input = document.getElementById('table-search');
-            var table = document.getElementById('komponen-table');
-            if (!table) return;
-
-            var rows = table.querySelectorAll('[data-search-row]');
-            var emptyRow = document.getElementById('no-result-row');
-            var counter = document.getElementById('row-count');
-
-            function apply() {
-                var q = input ? input.value.trim().toLowerCase() : '';
-                var visible = 0;
-
-                rows.forEach(function (row) {
-                    var show = row.textContent.toLowerCase().indexOf(q) !== -1;
-                    row.classList.toggle('hidden', !show);
-                    if (show) visible++;
-                });
-
-                if (counter) counter.textContent = visible;
-                if (emptyRow) emptyRow.classList.toggle('hidden', !(visible === 0 && rows.length > 0));
-            }
-
-            if (input) input.addEventListener('input', apply);
-        })();
-    </script>
 @endsection

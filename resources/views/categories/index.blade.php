@@ -10,6 +10,34 @@
         $totalUnit = $categories->sum(fn ($c) => $c->items->sum('stok'));
         $totalSku = $categories->sum('items_count');
         $stokMenipis = $categories->sum(fn ($c) => $c->items->where('stok', '<=', 5)->count());
+
+        // Ikon hardware per kategori, dicocokkan lewat nama kategori.
+        // Fallback ke ikon box bila nama tidak dikenali, jadi kategori baru tetap tampil rapi.
+        $ikonRak = function ($nama) {
+            $n = strtolower($nama);
+            if (str_contains($n, 'processor') || str_contains($n, 'cpu')) {
+                return 'chip';
+            }
+            if (str_contains($n, 'vga') || str_contains($n, 'gpu')) {
+                return 'gpu';
+            }
+            if (str_contains($n, 'ram') || str_contains($n, 'storage') || str_contains($n, 'ssd') || str_contains($n, 'memory')) {
+                return 'ram';
+            }
+            if (str_contains($n, 'gaming') || str_contains($n, 'gear') || str_contains($n, 'aksesoris')) {
+                return 'gear';
+            }
+            return 'box';
+        };
+
+        // Warna aksen per ikon agar tiap kartu rak punya identitas sendiri.
+        $warnaRak = [
+            'chip' => ['bg' => 'bg-indigo-50', 'text' => 'text-indigo-600', 'border' => 'border-indigo-200'],
+            'gpu'  => ['bg' => 'bg-violet-50', 'text' => 'text-violet-600', 'border' => 'border-violet-200'],
+            'ram'  => ['bg' => 'bg-cyan-50',   'text' => 'text-cyan-700',   'border' => 'border-cyan-200'],
+            'gear' => ['bg' => 'bg-teal-50',   'text' => 'text-teal-700',   'border' => 'border-teal-200'],
+            'box'  => ['bg' => 'bg-sky-50',    'text' => 'text-sky-700',    'border' => 'border-sky-200'],
+        ];
     @endphp
 
     {{-- BAGIAN 1: 3 Kartu Utama --}}
@@ -49,99 +77,110 @@
 
     </section>
 
-    {{-- BAGIAN 1b: Grid 4 Kartu KPI Berikon --}}
-    <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-
-        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-4 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <span class="w-9 h-9 shrink-0 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-200 flex items-center justify-center">
-                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M10 2.5l6.5 3.5v8L10 17.5 3.5 14V6L10 2.5z"/>
-                    <path d="M10 10v7.5M3.5 6L10 9.5 16.5 6"/>
-                </svg>
-            </span>
-            <div class="min-w-0">
-                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Total Jenis SKU</p>
-                <p class="font-mono text-lg font-bold text-[#0d47a1]">{{ $totalSku }}</p>
-            </div>
+    {{-- BAGIAN 2: Showcase Rak Komponen PC (interaktif, 1 kartu per kategori) --}}
+    <section class="mb-6">
+        <div class="flex items-baseline justify-between gap-3 mb-3">
+            <h2 class="text-sm font-bold text-blue-950">Rak Komponen PC</h2>
+            <a href="{{ route('items.index') }}"
+               class="text-xs font-medium text-[#2196f3] hover:text-blue-700 transition-all duration-200">
+                Lihat semua komponen &rarr;
+            </a>
         </div>
 
-        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-4 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <span class="w-9 h-9 shrink-0 rounded-lg bg-sky-50 text-sky-600 border border-sky-200 flex items-center justify-center">
-                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <ellipse cx="10" cy="5" rx="6" ry="2.5"/>
-                    <path d="M4 5v10c0 1.38 2.69 2.5 6 2.5s6-1.12 6-2.5V5"/>
-                    <path d="M4 10c0 1.38 2.69 2.5 6 2.5s6-1.12 6-2.5"/>
-                </svg>
-            </span>
-            <div class="min-w-0">
-                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Total Stok Fisik</p>
-                <p class="font-mono text-lg font-bold text-[#0d47a1]">{{ $totalUnit }}</p>
-            </div>
-        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            @foreach ($categories as $rak)
+                @php
+                    $jenis = $ikonRak($rak->nama_kategori);
+                    $warna = $warnaRak[$jenis];
+                    $unitRak = $rak->items->sum('stok');
+                    $menipisRak = $rak->items->where('stok', '<=', 5)->count();
+                    // Proporsi unit rak terhadap total stok gudang (hindari bagi nol).
+                    $persen = $totalUnit > 0 ? round($unitRak / $totalUnit * 100) : 0;
+                @endphp
 
-        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-4 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <span class="w-9 h-9 shrink-0 rounded-lg bg-teal-50 text-teal-600 border border-teal-200 flex items-center justify-center">
-                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M3 3h14v14H3z"/>
-                    <path d="M3 8h14M8 8v9"/>
-                </svg>
-            </span>
-            <div class="min-w-0">
-                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Total Kategori Rak</p>
-                <p class="font-mono text-lg font-bold text-[#0d47a1]">{{ $categories->count() }}</p>
-            </div>
-        </div>
+                <a href="{{ route('categories.show', $rak->id) }}"
+                   class="group bg-white border border-blue-100 shadow-sm rounded-xl p-5 flex flex-col transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-blue-300">
+                    <div class="flex items-start justify-between gap-3">
+                        <span class="w-11 h-11 shrink-0 rounded-xl {{ $warna['bg'] }} {{ $warna['text'] }} border {{ $warna['border'] }} flex items-center justify-center">
+                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                @if ($jenis === 'chip')
+                                    <rect x="7" y="7" width="10" height="10" rx="1.5"/>
+                                    <path d="M10 2.5v3M14 2.5v3M10 18.5v3M14 18.5v3M2.5 10h3M2.5 14h3M18.5 10h3M18.5 14h3"/>
+                                    <rect x="11" y="11" width="2" height="2" rx="0.4"/>
+                                @elseif ($jenis === 'gpu')
+                                    <rect x="2.5" y="6" width="17" height="11" rx="2"/>
+                                    <circle cx="9" cy="11.5" r="2.8"/>
+                                    <path d="M9 11.5h4.5M16 9v5M19.5 9.5v1.5M19.5 13v1.5"/>
+                                @elseif ($jenis === 'ram')
+                                    <rect x="2.5" y="7" width="19" height="10" rx="1.5"/>
+                                    <path d="M6 17v2.5M10 17v2.5M14 17v2.5M18 17v2.5"/>
+                                    <rect x="6" y="10" width="3" height="4" rx="0.5"/>
+                                    <rect x="10.5" y="10" width="3" height="4" rx="0.5"/>
+                                    <rect x="15" y="10" width="3" height="4" rx="0.5"/>
+                                @elseif ($jenis === 'gear')
+                                    <path d="M8 4.5h8l1.5 4.5-1.2 10.5a1.5 1.5 0 0 1-1.5 1.4H9.2a1.5 1.5 0 0 1-1.5-1.4L6.5 9z"/>
+                                    <path d="M8 4.5C8 3 9 2 10 2h4c1 0 2 1 2 2.5"/>
+                                    <path d="M12 9.5v6M9.5 12.5h5"/>
+                                @else
+                                    <path d="M3 7.5L12 3l9 4.5-9 4.5-9-4.5z"/>
+                                    <path d="M3 7.5v9L12 21l9-4.5v-9"/>
+                                    <path d="M12 12v9"/>
+                                @endif
+                            </svg>
+                        </span>
+                        <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
+                            {{ $rak->kode_rak }}
+                        </span>
+                    </div>
 
-        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-4 flex items-center gap-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <span class="w-9 h-9 shrink-0 rounded-lg bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center">
-                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M10 3l7 12H3l7-12z"/>
-                    <path d="M10 8v3.5M10 13.5v.01"/>
-                </svg>
-            </span>
-            <div class="min-w-0">
-                <p class="text-[10px] font-mono uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                    @if ($stokMenipis > 0)
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
-                    @endif
-                    Stok Menipis (&le;5)
-                </p>
-                <p class="font-mono text-lg font-bold text-[#0d47a1]">{{ $stokMenipis }}</p>
-            </div>
-        </div>
+                    <p class="mt-3 text-sm font-bold text-blue-950 truncate group-hover:text-[#2196f3] transition-all duration-200">
+                        {{ $rak->nama_kategori }}
+                    </p>
 
+                    <p class="mt-1 font-mono text-[11px] text-slate-600">
+                        {{ $rak->items_count }} SKU &middot; {{ $unitRak }} unit
+                    </p>
+
+                    {{-- Mini progress bar: proporsi unit rak terhadap total stok gudang. --}}
+                    <div class="mt-3">
+                        <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 mb-1">
+                            <span>Porsi Gudang</span>
+                            <span>{{ $persen }}%</span>
+                        </div>
+                        <div class="h-1.5 w-full rounded-full bg-blue-100 overflow-hidden">
+                            <div class="h-full rounded-full bg-[#2196f3] transition-all duration-500" style="width: {{ $persen }}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3.5">
+                        @if ($menipisRak > 0)
+                            <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 border border-amber-300 px-2.5 py-0.5 text-[11px] font-semibold text-amber-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+                                {{ $menipisRak }} Perlu Restock
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                                Stok Aman
+                            </span>
+                        @endif
+                    </div>
+                </a>
+            @endforeach
+
+            @if ($categories->isEmpty())
+                <p class="col-span-full py-10 text-center text-sm text-slate-500">Belum ada kategori pada database.</p>
+            @endif
+        </div>
     </section>
 
-    {{-- BAGIAN 3: Tabs + Tabel --}}
-    @php
-        // Semua item sudah termuat lewat eager loading $categories->items,
-        // jadi tidak perlu query baru dan controller tidak perlu diubah.
-        // Relasi category disetel manual agar $item->category tidak lazy load.
-        $semuaItem = $categories->flatMap(function ($c) {
-            return $c->items->each->setRelation('category', $c);
-        })->sortByDesc('id')->values();
-    @endphp
-
-    <div class="border-b border-blue-200 mb-5 flex gap-6 text-xs font-medium" role="tablist">
-        <button type="button" id="tab-btn-kategori" data-tab="kategori" role="tab" aria-selected="true"
-                aria-controls="panel-kategori"
-                class="tab-btn tab-on text-[#0d47a1] border-b-2 border-[#2196f3] pb-2.5 transition-all duration-200 hover:text-[#2196f3]">
-            Kategori
-        </button>
-        <button type="button" id="tab-btn-komponen" data-tab="komponen" role="tab" aria-selected="false"
-                aria-controls="panel-komponen"
-                class="tab-btn text-slate-500 hover:text-[#0d47a1] pb-2.5 border-b-2 border-transparent transition-all duration-200">
-            Semua Komponen
-        </button>
-    </div>
-
-    {{-- Panel 1: Tabel Kategori --}}
-    <div id="panel-kategori" role="tabpanel" aria-labelledby="tab-btn-kategori"
-         class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 opacity-100 transition-opacity duration-300">
+    {{-- BAGIAN 3: Tabel Daftar Kategori Rak --}}
+    <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6">
+        <div class="flex items-baseline justify-between gap-3 mb-4">
+            <h2 class="text-sm font-bold text-blue-950">Daftar Kategori Rak</h2>
+            <span class="font-mono text-[11px] text-slate-500">{{ $categories->count() }} RAK</span>
+        </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead class="bg-blue-50/80">
@@ -201,123 +240,4 @@
             </table>
         </div>
     </div>
-
-    {{-- Panel 2: Tabel Semua Komponen --}}
-    <div id="panel-komponen" role="tabpanel" aria-labelledby="tab-btn-komponen"
-         class="hidden bg-white border border-blue-100 shadow-sm rounded-xl p-6 opacity-0 transition-opacity duration-300">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead class="bg-blue-50/80">
-                    <tr class="text-[11px] text-blue-900 font-semibold border-b border-blue-100">
-                        <th scope="col" class="py-2.5 px-3 font-semibold">Kode SKU</th>
-                        <th scope="col" class="py-2.5 px-3 font-semibold">Merk</th>
-                        <th scope="col" class="py-2.5 px-3 font-semibold">Nama Komponen</th>
-                        <th scope="col" class="py-2.5 px-3 font-semibold">Kategori / Rak</th>
-                        <th scope="col" class="py-2.5 px-3 font-semibold text-right">Stok</th>
-                        <th scope="col" class="py-2.5 px-3 font-semibold text-right">Harga Satuan</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-blue-100 text-xs">
-                    @forelse ($semuaItem as $item)
-                        <tr class="transition-colors duration-150 hover:bg-blue-50/70">
-                            <td class="py-3.5 px-3 font-mono text-slate-700 align-top">{{ $item->kode_sku }}</td>
-                            <td class="py-3.5 px-3 font-mono text-[11px] uppercase text-blue-700 align-top">{{ $item->merk }}</td>
-                            <td class="py-3.5 px-3 text-slate-700 align-top">{{ $item->nama_barang }}</td>
-                            <td class="py-3.5 px-3 align-top">
-                                <a href="{{ route('categories.show', $item->category_id) }}"
-                                   class="inline-flex items-center gap-1.5 text-[#0d47a1] hover:text-[#2196f3] transition-all duration-200">
-                                    <span>{{ $item->category->nama_kategori }}</span>
-                                    <span class="font-mono text-[10px] text-slate-500 uppercase">{{ $item->category->kode_rak }}</span>
-                                </a>
-                            </td>
-                            <td class="py-3.5 px-3 font-mono font-semibold text-right align-top {{ $item->stok <= 5 ? 'text-amber-600' : 'text-emerald-600' }}">
-                                @if ($item->stok <= 5)
-                                    <span class="inline-flex items-center gap-1.5 justify-end">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
-                                        {{ $item->stok }}
-                                    </span>
-                                @else
-                                    {{ $item->stok }}
-                                @endif
-                            </td>
-                            <td class="py-3.5 px-3 font-mono font-semibold text-emerald-700 text-right align-top">
-                                {{ 'Rp ' . number_format($item->harga, 0, ',', '.') }}
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="py-10 text-center text-slate-500">
-                                Belum ada komponen pada database.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <script>
-        // Tab penampil tabel: Kategori <-> Semua Komponen, tanpa pindah halaman.
-        // Panel lama di-fade-out dulu agar kedua tabel tidak tampil bertumpuk.
-        (function () {
-            var buttons = document.querySelectorAll('.tab-btn');
-            var panels = {
-                kategori: document.getElementById('panel-kategori'),
-                komponen: document.getElementById('panel-komponen')
-            };
-            if (!buttons.length) return;
-
-            var current = 'kategori';
-            var animating = false;
-
-            function reveal(el) {
-                el.classList.remove('hidden');
-                // Paksa reflow supaya transisi opacity benar-benar berjalan.
-                void el.offsetWidth;
-                el.classList.remove('opacity-0');
-                el.classList.add('opacity-100');
-            }
-
-            function conceal(el) {
-                el.classList.remove('opacity-100');
-                el.classList.add('opacity-0');
-            }
-
-            function syncButtons(name) {
-                buttons.forEach(function (btn) {
-                    var on = btn.dataset.tab === name;
-                    btn.setAttribute('aria-selected', on ? 'true' : 'false');
-                    btn.classList.toggle('tab-on', on);
-                    btn.classList.toggle('text-[#0d47a1]', on);
-                    btn.classList.toggle('border-[#2196f3]', on);
-                    btn.classList.toggle('border-transparent', !on);
-                    btn.classList.toggle('text-slate-500', !on);
-                });
-            }
-
-            function show(name) {
-                var next = panels[name];
-                var prev = panels[current];
-                if (!next || name === current || animating) return;
-
-                animating = true;
-                syncButtons(name);
-
-                if (prev) conceal(prev);
-
-                window.setTimeout(function () {
-                    if (prev) prev.classList.add('hidden');
-                    reveal(next);
-                    current = name;
-                    animating = false;
-                }, 150);
-            }
-
-            buttons.forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    show(btn.dataset.tab);
-                });
-            });
-        })();
-    </script>
 @endsection

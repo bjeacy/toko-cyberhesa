@@ -51,8 +51,8 @@
                         Kode SKU <span class="text-rose-600">*</span>
                     </label>
                     <input type="text" name="kode_sku" id="kode_sku" value="{{ old('kode_sku') }}"
-                           placeholder="CPU-INT-13400F" autocomplete="off"
-                           class="w-full bg-white border border-blue-200 rounded-xl px-3.5 py-2.5 text-sm font-mono text-blue-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2196f3]/20
+                           placeholder="CPU-INT-13400F" autocomplete="off" data-uppercase
+                           class="w-full bg-white border border-blue-200 rounded-xl px-3.5 py-2.5 text-sm font-mono text-blue-950 placeholder-slate-400 uppercase focus:outline-none focus:ring-2 focus:ring-[#2196f3]/20
                                   {{ $errors->has('kode_sku') ? 'border-rose-400 focus:border-rose-500' : 'focus:border-[#2196f3]' }}">
                     <p class="mt-1.5 text-xs text-slate-500">Format: KATEGORI-MERK-MODEL</p>
                     @error('kode_sku')
@@ -98,7 +98,7 @@
                     <input type="number" name="stok" id="stok" min="0" step="1" value="{{ old('stok', 0) }}"
                            class="w-full bg-white border border-blue-200 rounded-xl px-3.5 py-2.5 text-sm font-mono text-blue-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2196f3]/20
                                   {{ $errors->has('stok') ? 'border-rose-400 focus:border-rose-500' : 'focus:border-[#2196f3]' }}">
-                    <p class="mt-1.5 text-xs text-slate-500">Nilai &le; 5 ditandai menipis</p>
+                    <p class="mt-1.5 text-xs text-slate-500">Batas minimum stok aman: 6 unit</p>
                     @error('stok')
                         <p class="mt-1.5 text-xs text-rose-600">{{ $message }}</p>
                     @enderror
@@ -117,6 +117,7 @@
                                       {{ $errors->has('harga') ? 'border-rose-400 focus:border-rose-500' : 'focus:border-[#2196f3]' }}">
                     </div>
                     <p class="mt-1.5 text-xs text-slate-500">Tanpa titik atau koma</p>
+                    <p id="harga-preview" class="mt-1 text-xs font-mono text-[#0d47a1] hidden"></p>
                     @error('harga')
                         <p class="mt-1.5 text-xs text-rose-600">{{ $message }}</p>
                     @enderror
@@ -145,4 +146,37 @@
             Belum ada kategori. Jalankan <code class="font-mono">php artisan migrate:fresh --seed</code> agar dropdown terisi.
         </div>
     @endif
+
+    <script>
+        (function () {
+            // Input SKU: paksa huruf kapital pada NILAI, bukan hanya tampilan CSS,
+            // supaya yang tersimpan di database benar-benar huruf besar.
+            var sku = document.querySelector('[data-uppercase]');
+            if (sku) {
+                sku.addEventListener('input', function () {
+                    var start = sku.selectionStart;
+                    sku.value = sku.value.toUpperCase();
+                    sku.setSelectionRange(start, start);
+                });
+            }
+
+            // Preview Rupiah real-time. Elemen terpisah, nilai input tetap integer murni.
+            var harga = document.getElementById('harga');
+            var preview = document.getElementById('harga-preview');
+            if (harga && preview) {
+                var render = function () {
+                    var n = parseInt(harga.value, 10);
+                    if (!harga.value || isNaN(n) || n <= 0) {
+                        preview.classList.add('hidden');
+                        preview.textContent = '';
+                        return;
+                    }
+                    preview.textContent = 'Preview: Rp ' + new Intl.NumberFormat('id-ID').format(n);
+                    preview.classList.remove('hidden');
+                };
+                harga.addEventListener('input', render);
+                render();
+            }
+        })();
+    </script>
 @endsection

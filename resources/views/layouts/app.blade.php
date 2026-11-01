@@ -91,5 +91,147 @@
         </div>
 
     </div>
+
+    <script>
+        // Skrip tabel bersama: live search, sorting kolom, dan unduh CSV.
+        // Dipakai oleh categories/show dan items/index. Keluar lebih awal bila
+        // halaman tidak memiliki tabel, sehingga halaman form tidak terpengaruh.
+        (function () {
+            var table = document.querySelector('[data-table]');
+            if (!table) return;
+
+            var input    = document.getElementById('table-search');
+            var emptyRow = document.getElementById('no-result-row');
+            var counter  = document.getElementById('row-count');
+            var tbody    = table.querySelector('tbody');
+            var csvBtn   = document.getElementById('csv-export');
+
+            // ?fokus=menipis dari sidebar: hanya tampilkan baris stok <= 5.
+            var fokusMenipis = new URLSearchParams(location.search).get('fokus') === 'menipis';
+            var filterBadge  = document.getElementById('fokus-menipis');
+
+            function rows() {
+                return Array.prototype.slice.call(tbody.querySelectorAll('[data-search-row]'));
+            }
+
+            function visibleRows() {
+                return rows().filter(function (r) { return !r.classList.contains('hidden'); });
+            }
+
+            function applySearch() {
+                var q = input ? input.value.trim().toLowerCase() : '';
+                var list = rows();
+                var shown = 0;
+
+                list.forEach(function (row) {
+                    var match = row.textContent.toLowerCase().indexOf(q) !== -1;
+                    if (match && fokusMenipis) {
+                        match = parseFloat(row.dataset.sortstok || '0') <= 5;
+                    }
+                    row.classList.toggle('hidden', !match);
+                    if (match) shown++;
+                });
+
+                if (counter) counter.textContent = shown;
+                if (emptyRow) emptyRow.classList.toggle('hidden', !(shown === 0 && list.length > 0));
+            }
+
+            if (filterBadge) {
+                filterBadge.classList.toggle('hidden', !fokusMenipis);
+                filterBadge.classList.toggle('flex', fokusMenipis);
+            }
+
+            // Tombol silang di badge: matikan filter menipis tanpa memuat ulang halaman.
+            var resetBtn = document.getElementById('fokus-reset');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function () {
+                    fokusMenipis = false;
+                    if (filterBadge) {
+                        filterBadge.classList.add('hidden');
+                        filterBadge.classList.remove('flex');
+                    }
+                    // Bersihkan param agar URL tidak lagi mengaku terfilter.
+                    if (window.history.replaceState) {
+                        window.history.replaceState({}, '', location.pathname);
+                    }
+                    applySearch();
+                });
+            }
+
+            if (input) input.addEventListener('input', applySearch);
+
+            // Sorting: klik header ber-data-sort. Nilai diambil dari data-sort-* di <tr>.
+            var headers = table.querySelectorAll('th[data-sort]');
+            headers.forEach(function (th) {
+                th.addEventListener('click', function () {
+                    var key  = th.dataset.sort;
+                    var asc  = th.dataset.dir !== 'asc';
+
+                    headers.forEach(function (other) {
+                        delete other.dataset.dir;
+                        var mark = other.querySelector('[data-arrow]');
+                        if (mark) mark.textContent = '';
+                    });
+
+                    th.dataset.dir = asc ? 'asc' : 'desc';
+                    var arrow = th.querySelector('[data-arrow]');
+                    if (arrow) arrow.textContent = asc ? '\u25B2' : '\u25BC';
+
+                    var sorted = rows().sort(function (a, b) {
+                        var x = parseFloat(a.dataset['sort' + key] || 0);
+                        var y = parseFloat(b.dataset['sort' + key] || 0);
+                        return asc ? x - y : y - x;
+                    });
+
+                    sorted.forEach(function (row) { tbody.appendChild(row); });
+                    applySearch();
+                });
+            });
+
+            // Unduh CSV: hanya baris yang sedang tampil, agar sejalan dengan pencarian.
+            if (csvBtn) {
+                csvBtn.addEventListener('click', function () {
+                    var list = visibleRows();
+                    if (!list.length) return;
+
+                    var headCells = table.querySelectorAll('thead th');
+                    var lines = [];
+                    var head = [];
+                    headCells.forEach(function (th) {
+                        var label = (th.dataset.label || th.textContent).replace(/[\u25B2\u25BC]/g, '').trim();
+                        head.push(csvCell(label));
+                    });
+                    lines.push(head.join(';'));
+
+                    list.forEach(function (row) {
+                        var cells = [];
+                        row.querySelectorAll('td').forEach(function (td) {
+                            cells.push(csvCell(td.innerText.replace(/\s+/g, ' ').trim()));
+                        });
+                        lines.push(cells.join(';'));
+                    });
+
+                    // BOM UTF-8 agar Excel membaca karakter dengan benar.
+                    var blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+                    var url  = URL.createObjectURL(blob);
+                    var a    = document.createElement('a');
+                    a.href = url;
+                    a.download = (csvBtn.dataset.filename || 'laporan-stok') + '.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                });
+            }
+
+            // Escape sel CSV: bungkus kutip ganda, gandakan kutip di dalamnya.
+            function csvCell(v) {
+                return '"' + String(v).replace(/"/g, '""') + '"';
+            }
+
+            // Terapkan filter awal (mis. ?fokus=menipis) saat halaman dimuat.
+            applySearch();
+        })();
+    </script>
 </body>
 </html>
