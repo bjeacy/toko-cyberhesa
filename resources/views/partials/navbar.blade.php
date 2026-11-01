@@ -88,8 +88,8 @@
                 </div>
 
                 <a href="{{ route('items.index') }}"
-                   class="{{ request()->routeIs('items.index') ? $active : $idle }}">
-                    <svg class="h-4 w-4 shrink-0 {{ request()->routeIs('items.index') ? 'text-white' : 'text-slate-500 group-hover:text-[#1565c0]' }}" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                   class="{{ request()->routeIs('items.index') && request('fokus') !== 'menipis' ? $active : $idle }}">
+                    <svg class="h-4 w-4 shrink-0 {{ request()->routeIs('items.index') && request('fokus') !== 'menipis' ? 'text-white' : 'text-slate-500 group-hover:text-[#1565c0]' }}" viewBox="0 0 20 20" fill="none" stroke="currentColor"
                          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="2.5" y="3.5" width="15" height="5" rx="1.5"/>
                         <rect x="2.5" y="11.5" width="15" height="5" rx="1.5"/>

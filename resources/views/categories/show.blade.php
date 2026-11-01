@@ -21,44 +21,87 @@
         <span class="text-[#0d47a1] font-medium">{{ $category->nama_kategori }}</span>
     </nav>
 
-    {{-- 3 Kartu Ringkasan --}}
+    {{-- 3 Kartu Ringkasan. Gaya seragam dengan dashboard: rata kiri, ikon pojok kanan, font sans tabular. --}}
     <section class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
 
-        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <p class="text-xs font-medium text-slate-600">Info Rak</p>
-            <p class="text-2xl font-mono font-bold text-[#0d47a1] mt-1 mb-2 uppercase">{{ $category->kode_rak }}</p>
-            <p class="text-xs text-slate-600 leading-relaxed">{{ $category->deskripsi ?? 'Belum ada deskripsi.' }}</p>
-        </div>
-
-        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <p class="text-xs font-medium text-slate-600">Total SKU &amp; Unit</p>
-            <div class="border border-blue-200 bg-[#e3f2fd] rounded-lg p-3 my-3">
-                <p class="font-mono text-sm text-[#0d47a1]">{{ $totalSku }} Jenis Komponen</p>
-                <p class="font-mono text-[11px] text-slate-600 mt-0.5">{{ $totalUnit }} unit fisik tersedia</p>
-            </div>
-            <p class="font-mono text-[11px] font-semibold {{ $stokMenipis > 0 ? 'text-amber-600' : 'text-emerald-600' }}">
-                @if ($stokMenipis > 0)
-                    <span class="inline-flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
-                        {{ $stokMenipis . ' SKU stok menipis' }}
-                    </span>
-                @else
-                    Semua stok aman
-                @endif
+        {{-- Kartu 1: Identitas rak --}}
+        <div class="relative overflow-hidden bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <span class="absolute top-6 right-6 w-11 h-11 rounded-xl flex items-center justify-center bg-indigo-50 text-indigo-600">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="6" rx="2"/>
+                    <rect x="3" y="14" width="18" height="6" rx="2"/>
+                    <path d="M7 7h.01M7 17h.01"/>
+                </svg>
+            </span>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Kode Rak</p>
+            <p class="text-xl sm:text-2xl font-sans font-extrabold tracking-tight tabular-nums text-blue-950 mt-2 uppercase">
+                {{ $category->kode_rak }}
+            </p>
+            <p class="text-xs text-slate-500 mt-3 flex items-start gap-1.5">
+                <svg class="h-3.5 w-3.5 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="10" cy="10" r="7"/>
+                    <path d="M10 6.5v7M8 8.5h3.2a1.4 1.4 0 0 1 0 2.8H8.8a1.4 1.4 0 0 0 0 2.8H12"/>
+                </svg>
+                {{ $category->deskripsi ?? 'Belum ada deskripsi.' }}
             </p>
         </div>
 
-        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <p class="text-xs font-medium text-slate-600">Total Valuasi Rak</p>
-            <p class="text-2xl font-mono font-bold text-[#0d47a1] mt-1 mb-5">{{ 'Rp ' . number_format($nilaiAset, 0, ',', '.') }}</p>
-            <a href="{{ route('items.create', ['category_id' => $category->id]) }}"
-               class="bg-[#2196f3] hover:bg-blue-600 active:scale-[0.98] text-white font-medium shadow-sm text-xs px-4 py-2 rounded-lg transition-all duration-200 inline-flex items-center gap-1.5">
-                <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4"
-                     stroke-linecap="round" aria-hidden="true">
-                    <path d="M10 4v12M4 10h12"/>
+        {{-- Kartu 2: Isi rak --}}
+        <div class="relative overflow-hidden bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <span class="absolute top-6 right-6 w-11 h-11 rounded-xl flex items-center justify-center bg-blue-50 text-[#1976d2]">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2.5" y="3.5" width="19" height="7" rx="2"/>
+                    <rect x="2.5" y="13.5" width="19" height="7" rx="2"/>
+                    <path d="M6.5 7h.01M6.5 17h.01"/>
                 </svg>
-                Tambah ke Rak Ini
-            </a>
+            </span>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Isi Rak</p>
+            <p class="text-xl sm:text-2xl font-sans font-extrabold tracking-tight tabular-nums text-blue-950 mt-2">
+                {{ $totalUnit }} Unit
+            </p>
+            <span class="bg-blue-50 text-[#1565c0] font-semibold text-xs px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-3">
+                {{ $totalSku }} Jenis Komponen Terdaftar
+            </span>
+        </div>
+
+        {{-- Kartu 3: Valuasi rak + aksi --}}
+        <div class="relative overflow-hidden bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <span class="absolute top-6 right-6 w-11 h-11 rounded-xl flex items-center justify-center bg-emerald-50 text-emerald-600">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2.5" y="6.5" width="19" height="11" rx="2"/>
+                    <circle cx="12" cy="12" r="2.6"/>
+                    <path d="M6 9.5v5M18 9.5v5"/>
+                </svg>
+            </span>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Valuasi Rak</p>
+            <p class="text-xl sm:text-2xl font-sans font-extrabold tracking-tight tabular-nums text-blue-950 mt-2">
+                {{ 'Rp ' . number_format($nilaiAset, 0, ',', '.') }}
+            </p>
+            @if ($stokMenipis > 0)
+                <span class="bg-amber-50 text-amber-800 border border-amber-200/70 text-xs font-semibold px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+                    {{ $stokMenipis }} SKU perlu segera restock
+                </span>
+            @else
+                <span class="bg-emerald-50 text-emerald-800 border border-emerald-200/70 text-xs font-semibold px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                    Semua stok komponen aman
+                </span>
+            @endif
+            <div class="mt-3">
+                <a href="{{ route('items.create', ['category_id' => $category->id]) }}"
+                   class="bg-[#2196f3] hover:bg-blue-600 active:scale-[0.98] text-white font-medium shadow-sm text-xs px-4 py-2 rounded-lg transition-all duration-200 inline-flex items-center gap-1.5">
+                    <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4"
+                         stroke-linecap="round" aria-hidden="true">
+                        <path d="M10 4v12M4 10h12"/>
+                    </svg>
+                    Tambah ke Rak Ini
+                </a>
+            </div>
         </div>
 
     </section>

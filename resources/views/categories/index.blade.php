@@ -40,39 +40,78 @@
         ];
     @endphp
 
-    {{-- BAGIAN 1: 3 Kartu Utama --}}
+    {{-- BAGIAN 1: 3 Kartu Utama. Rata kiri, ikon di pojok kanan, angka pakai font sans tabular. --}}
     <section class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
 
-        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 text-center flex flex-col items-center justify-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <p class="text-xs font-medium text-slate-600">Total Valuasi Inventaris</p>
-            <p class="text-2xl font-mono font-bold text-[#0d47a1] mt-1">{{ 'Rp ' . number_format($totalNilai, 0, ',', '.') }}</p>
+        {{-- Kartu 1: Valuasi --}}
+        <div class="relative overflow-hidden bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <span class="absolute top-6 right-6 w-11 h-11 rounded-xl flex items-center justify-center bg-blue-50 text-[#1976d2]">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2.5" y="6.5" width="19" height="11" rx="2"/>
+                    <circle cx="12" cy="12" r="2.6"/>
+                    <path d="M6 9.5v5M18 9.5v5"/>
+                </svg>
+            </span>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Valuasi Inventaris</p>
+            <p class="text-xl sm:text-2xl font-sans font-extrabold tracking-tight tabular-nums text-blue-950 mt-2">
+                {{ 'Rp ' . number_format($totalNilai, 0, ',', '.') }}
+            </p>
+            <p class="text-xs text-slate-500 mt-3 flex items-center gap-1.5">
+                <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="10" cy="10" r="7"/>
+                    <path d="M10 6.5v7M8 8.5h3.2a1.4 1.4 0 0 1 0 2.8H8.8a1.4 1.4 0 0 0 0 2.8H12"/>
+                </svg>
+                Akumulasi nilai seluruh komponen aktif
+            </p>
         </div>
 
-        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 text-center flex flex-col items-center justify-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <p class="text-xs font-medium text-slate-600">Ringkasan Penyimpanan</p>
-            <div class="border border-blue-200 bg-[#e3f2fd] rounded-lg p-3 mt-3 w-full">
-                <p class="font-mono text-sm text-[#0d47a1]">{{ $categories->count() }} Kategori Rak Aktif</p>
-                <p class="font-mono text-[11px] text-slate-600 mt-0.5">Total {{ $totalSku }} Jenis SKU Terdaftar</p>
-            </div>
+        {{-- Kartu 2: Penyimpanan --}}
+        <div class="relative overflow-hidden bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <span class="absolute top-6 right-6 w-11 h-11 rounded-xl flex items-center justify-center bg-indigo-50 text-indigo-600">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="6" rx="2"/>
+                    <rect x="3" y="14" width="18" height="6" rx="2"/>
+                    <path d="M7 7h.01M7 17h.01"/>
+                </svg>
+            </span>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Kapasitas Penyimpanan</p>
+            <p class="text-xl sm:text-2xl font-sans font-extrabold tracking-tight tabular-nums text-blue-950 mt-2">
+                {{ $categories->count() }} Rak Aktif
+            </p>
+            <span class="bg-blue-50 text-[#1565c0] font-semibold text-xs px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-3">
+                Total {{ $totalSku }} Jenis SKU Terdaftar
+            </span>
         </div>
 
-        <div class="bg-white border border-blue-100 shadow-sm rounded-xl p-6 text-center flex flex-col items-center justify-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <p class="text-xs font-medium text-slate-600 flex items-center justify-center gap-1">
+        {{-- Kartu 3: Monitoring stok --}}
+        <div class="relative overflow-hidden bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <span class="absolute top-6 right-6 w-11 h-11 rounded-xl flex items-center justify-center {{ $stokMenipis > 0 ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600' }}">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3.5 12h3.5l2-5 3 10 2.5-7 1.5 2h4.5"/>
+                </svg>
+            </span>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
                 Monitoring Stok
-                <span class="bg-[#2196f3] text-white text-[10px] font-mono px-1.5 py-0.5 rounded">ACTIVE</span>
+                <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full normal-case tracking-normal">LIVE / ACTIVE</span>
             </p>
-            <p class="text-xs text-slate-600 leading-relaxed mt-3">
-                Terdapat <span class="font-mono font-semibold text-[#0d47a1]">{{ $totalUnit }} unit tersedia</span> di seluruh rak.
-                @if ($stokMenipis > 0)
-                    <span class="inline-flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
-                        <span class="text-amber-600 font-mono font-semibold">{{ $stokMenipis }} SKU</span>
-                    </span>
-                    perlu segera ditambah stoknya.
-                @else
-                    Seluruh SKU berada pada level stok aman.
-                @endif
+            <p class="text-xl sm:text-2xl font-sans font-extrabold tracking-tight tabular-nums text-blue-950 mt-2">
+                {{ $totalUnit }} Unit Tersedia
             </p>
+            @if ($stokMenipis > 0)
+                <span class="bg-amber-50 text-amber-800 border border-amber-200/70 text-xs font-semibold px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
+                    {{ $stokMenipis }} SKU perlu segera restock
+                </span>
+            @else
+                <span class="bg-emerald-50 text-emerald-800 border border-emerald-200/70 text-xs font-semibold px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                    Semua stok komponen aman
+                </span>
+            @endif
         </div>
 
     </section>
