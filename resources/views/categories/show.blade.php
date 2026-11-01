@@ -25,7 +25,7 @@
     <section class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
 
         {{-- Kartu 1: Identitas rak --}}
-        <div class="relative overflow-hidden bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+        <div class="relative overflow-hidden flex flex-col bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
             <span class="absolute top-6 right-6 w-11 h-11 rounded-xl flex items-center justify-center bg-indigo-50 text-indigo-600">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -38,7 +38,7 @@
             <p class="text-xl sm:text-2xl font-sans font-extrabold tracking-tight tabular-nums text-blue-950 mt-2 uppercase">
                 {{ $category->kode_rak }}
             </p>
-            <p class="text-xs text-slate-500 mt-3 flex items-start gap-1.5">
+            <p class="text-xs text-slate-500 mt-auto flex items-start gap-1.5">
                 <svg class="h-3.5 w-3.5 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <circle cx="10" cy="10" r="7"/>
@@ -49,7 +49,7 @@
         </div>
 
         {{-- Kartu 2: Isi rak --}}
-        <div class="relative overflow-hidden bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+        <div class="relative overflow-hidden flex flex-col bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
             <span class="absolute top-6 right-6 w-11 h-11 rounded-xl flex items-center justify-center bg-blue-50 text-[#1976d2]">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -62,13 +62,13 @@
             <p class="text-xl sm:text-2xl font-sans font-extrabold tracking-tight tabular-nums text-blue-950 mt-2">
                 {{ $totalUnit }} Unit
             </p>
-            <span class="bg-blue-50 text-[#1565c0] font-semibold text-xs px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-3">
+            <span class="bg-blue-50 text-[#1565c0] font-semibold text-xs px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-auto self-start">
                 {{ $totalSku }} Jenis Komponen Terdaftar
             </span>
         </div>
 
-        {{-- Kartu 3: Valuasi rak + aksi --}}
-        <div class="relative overflow-hidden bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+        {{-- Kartu 3: Valuasi rak --}}
+        <div class="relative overflow-hidden flex flex-col bg-white border border-blue-100/80 rounded-2xl shadow-sm p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
             <span class="absolute top-6 right-6 w-11 h-11 rounded-xl flex items-center justify-center bg-emerald-50 text-emerald-600">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -82,26 +82,16 @@
                 {{ 'Rp ' . number_format($nilaiAset, 0, ',', '.') }}
             </p>
             @if ($stokMenipis > 0)
-                <span class="bg-amber-50 text-amber-800 border border-amber-200/70 text-xs font-semibold px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-3">
+                <span class="bg-amber-50 text-amber-800 border border-amber-200/70 text-xs font-semibold px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-auto self-start">
                     <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
                     {{ $stokMenipis }} SKU perlu segera restock
                 </span>
             @else
-                <span class="bg-emerald-50 text-emerald-800 border border-emerald-200/70 text-xs font-semibold px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-3">
+                <span class="bg-emerald-50 text-emerald-800 border border-emerald-200/70 text-xs font-semibold px-2.5 py-1 rounded-lg inline-flex items-center gap-1.5 mt-auto self-start">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
                     Semua stok komponen aman
                 </span>
             @endif
-            <div class="mt-3">
-                <a href="{{ route('items.create', ['category_id' => $category->id]) }}"
-                   class="bg-[#2196f3] hover:bg-blue-600 active:scale-[0.98] text-white font-medium shadow-sm text-xs px-4 py-2 rounded-lg transition-all duration-200 inline-flex items-center gap-1.5">
-                    <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4"
-                         stroke-linecap="round" aria-hidden="true">
-                        <path d="M10 4v12M4 10h12"/>
-                    </svg>
-                    Tambah ke Rak Ini
-                </a>
-            </div>
         </div>
 
     </section>

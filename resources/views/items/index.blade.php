@@ -71,14 +71,6 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-                <a href="{{ route('items.create') }}"
-                   class="bg-[#2196f3] hover:bg-blue-600 active:scale-[0.98] text-white font-medium shadow-sm text-xs px-4 py-2 rounded-lg transition-all duration-200 inline-flex items-center gap-1.5">
-                    <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4"
-                         stroke-linecap="round" aria-hidden="true">
-                        <path d="M10 4v12M4 10h12"/>
-                    </svg>
-                    Input Barang Masuk
-                </a>
                 <button type="button" id="csv-export" data-filename="stok-semua-komponen"
                         class="bg-white hover:bg-blue-50 active:scale-[0.98] text-[#0d47a1] border border-blue-200 font-medium text-xs px-3.5 py-2 rounded-lg transition-all duration-200 inline-flex items-center gap-1.5">
                     <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"

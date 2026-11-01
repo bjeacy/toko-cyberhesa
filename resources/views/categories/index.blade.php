@@ -132,7 +132,6 @@
                     $jenis = $ikonRak($rak->nama_kategori);
                     $warna = $warnaRak[$jenis];
                     $unitRak = $rak->items->sum('stok');
-                    $menipisRak = $rak->items->where('stok', '<=', 5)->count();
                     // Proporsi unit rak terhadap total stok gudang (hindari bagi nol).
                     $persen = $totalUnit > 0 ? round($unitRak / $totalUnit * 100) : 0;
                 @endphp
@@ -190,20 +189,6 @@
                         <div class="h-1.5 w-full rounded-full bg-blue-100 overflow-hidden">
                             <div class="h-full rounded-full bg-[#2196f3] transition-all duration-500" style="width: {{ $persen }}%"></div>
                         </div>
-                    </div>
-
-                    <div class="mt-3.5">
-                        @if ($menipisRak > 0)
-                            <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 border border-amber-300 px-2.5 py-0.5 text-[11px] font-semibold text-amber-800">
-                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" aria-hidden="true"></span>
-                                {{ $menipisRak }} Perlu Restock
-                            </span>
-                        @else
-                            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-800">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
-                                Stok Aman
-                            </span>
-                        @endif
                     </div>
                 </a>
             @endforeach
