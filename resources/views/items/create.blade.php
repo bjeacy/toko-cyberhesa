@@ -14,7 +14,9 @@
         <span class="text-[#0d47a1] font-medium">Input Baru</span>
     </nav>
 
-    <div class="bg-white border border-blue-100 shadow-sm rounded-2xl p-6 max-w-2xl">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+
+    <div class="lg:col-span-2 bg-white border border-blue-100 shadow-sm rounded-2xl p-6">
         <div class="mb-6">
             <p class="text-sm font-bold text-blue-950">Data Komponen</p>
             <p class="text-xs text-slate-600 mt-1">Kolom bertanda <span class="text-rose-600 font-semibold">*</span> wajib diisi.</p>
@@ -139,6 +141,92 @@
                 </a>
             </div>
         </form>
+    </div>
+
+    {{-- Panel pendamping: panduan pengisian, alur kerja, dan tips penomoran SKU. --}}
+    <aside class="space-y-5">
+
+        {{-- Panduan pengisian field --}}
+        <div class="bg-white border border-blue-100 shadow-sm rounded-2xl p-5">
+            <div class="flex items-center gap-2">
+                <span class="w-8 h-8 shrink-0 rounded-lg bg-blue-50 text-[#1976d2] flex items-center justify-center">
+                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
+                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="10" cy="10" r="7"/>
+                        <path d="M10 9v4.5M10 6.5h.01"/>
+                    </svg>
+                </span>
+                <p class="text-sm font-bold text-blue-950">Panduan Pengisian</p>
+            </div>
+
+            <dl class="mt-4 space-y-3.5 text-xs">
+                <div>
+                    <dt class="font-semibold text-blue-950">Kategori</dt>
+                    <dd class="text-slate-500 mt-0.5 leading-relaxed">Rak tujuan penyimpanan. Menentukan lokasi fisik komponen di gudang.</dd>
+                </div>
+                <div>
+                    <dt class="font-semibold text-blue-950">Kode SKU</dt>
+                    <dd class="text-slate-500 mt-0.5 leading-relaxed">Identitas unik yang tidak boleh sama antar komponen. Otomatis jadi huruf kapital.</dd>
+                </div>
+                <div>
+                    <dt class="font-semibold text-blue-950">Merk</dt>
+                    <dd class="text-slate-500 mt-0.5 leading-relaxed">Nama pabrikan, misalnya Intel, AMD, ASUS, atau Logitech.</dd>
+                </div>
+                <div>
+                    <dt class="font-semibold text-blue-950">Nama Komponen</dt>
+                    <dd class="text-slate-500 mt-0.5 leading-relaxed">Nama lengkap beserta seri, supaya mudah dicari saat pencarian stok.</dd>
+                </div>
+                <div>
+                    <dt class="font-semibold text-blue-950">Stok</dt>
+                    <dd class="text-slate-500 mt-0.5 leading-relaxed">Jumlah unit fisik yang masuk. Di bawah 6 unit akan ditandai stok menipis.</dd>
+                </div>
+                <div>
+                    <dt class="font-semibold text-blue-950">Harga Satuan</dt>
+                    <dd class="text-slate-500 mt-0.5 leading-relaxed">Harga per unit dalam Rupiah. Isi angka saja tanpa titik atau koma.</dd>
+                </div>
+            </dl>
+        </div>
+
+        {{-- Alur penomoran SKU --}}
+        <div class="bg-white border border-blue-100 shadow-sm rounded-2xl p-5">
+            <p class="text-sm font-bold text-blue-950">Pola Kode SKU</p>
+            <p class="text-xs text-slate-500 mt-1">Tiga bagian dipisah tanda hubung.</p>
+
+            <div class="mt-3.5 flex items-center gap-1.5 font-mono text-[11px]">
+                <span class="bg-blue-50 text-[#1565c0] font-semibold px-2 py-1 rounded-md border border-blue-100">KATEGORI</span>
+                <span class="text-slate-300">-</span>
+                <span class="bg-indigo-50 text-indigo-700 font-semibold px-2 py-1 rounded-md border border-indigo-100">MERK</span>
+                <span class="text-slate-300">-</span>
+                <span class="bg-teal-50 text-teal-700 font-semibold px-2 py-1 rounded-md border border-teal-100">MODEL</span>
+            </div>
+
+            <div class="mt-3.5 space-y-1.5">
+                @foreach (['CPU-INT-13400F', 'VGA-ASU-4060', 'RAM-KNG-FURY16'] as $contoh)
+                    <p class="font-mono text-[11px] text-slate-600 bg-slate-50 border border-slate-100 rounded-md px-2.5 py-1.5">{{ $contoh }}</p>
+                @endforeach
+            </div>
+        </div>
+
+        {{-- Tips operasional --}}
+        <div class="bg-amber-50/60 border border-amber-200/70 rounded-2xl p-5">
+            <div class="flex items-center gap-2">
+                <span class="w-7 h-7 shrink-0 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
+                    <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9"
+                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M10 3v9M6.5 8.5L10 12l3.5-3.5M4 15.5h12"/>
+                    </svg>
+                </span>
+                <p class="text-sm font-bold text-amber-900">Tips Cepat</p>
+            </div>
+            <ul class="mt-3 space-y-2 text-xs text-amber-900/80">
+                <li class="flex gap-2"><span class="text-amber-500">•</span> Ganti nama komponen bila serinya berbeda, meski mereknya sama.</li>
+                <li class="flex gap-2"><span class="text-amber-500">•</span> Komponen dengan stok menipis muncul otomatis di menu Cek Stok Menipis.</li>
+                <li class="flex gap-2"><span class="text-amber-500">•</span> Cek dulu kode SKU di halaman Data Komponen agar tidak duplikat.</li>
+            </ul>
+        </div>
+
+    </aside>
+
     </div>
 
     @if ($categories->isEmpty())
