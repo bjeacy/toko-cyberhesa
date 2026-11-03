@@ -20,7 +20,6 @@
                         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
                     },
                     keyframes: {
-                        // Konten masuk dari bawah ke atas saat halaman dimuat.
                         fadeIn: {
                             '0%': { opacity: '0', transform: 'translateY(0.5rem)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
@@ -72,7 +71,6 @@
                     </div>
 
                     <script>
-                        // Flash sukses hilang sendiri setelah 5 detik, tetap bisa ditutup manual.
                         (function () {
                             var el = document.getElementById('flash-success');
                             if (!el) return;
@@ -93,9 +91,6 @@
     </div>
 
     <script>
-        // Skrip tabel bersama: live search, sorting kolom, dan unduh CSV.
-        // Dipakai oleh categories/show dan items/index. Keluar lebih awal bila
-        // halaman tidak memiliki tabel, sehingga halaman form tidak terpengaruh.
         (function () {
             var table = document.querySelector('[data-table]');
             if (!table) return;
@@ -106,7 +101,6 @@
             var tbody    = table.querySelector('tbody');
             var csvBtn   = document.getElementById('csv-export');
 
-            // ?fokus=menipis dari sidebar: hanya tampilkan baris stok <= 5.
             var fokusMenipis = new URLSearchParams(location.search).get('fokus') === 'menipis';
             var filterBadge  = document.getElementById('fokus-menipis');
 
@@ -141,7 +135,7 @@
                 filterBadge.classList.toggle('flex', fokusMenipis);
             }
 
-            // Tombol silang di badge: matikan filter menipis tanpa memuat ulang halaman.
+           
             var resetBtn = document.getElementById('fokus-reset');
             if (resetBtn) {
                 resetBtn.addEventListener('click', function () {
@@ -150,7 +144,7 @@
                         filterBadge.classList.add('hidden');
                         filterBadge.classList.remove('flex');
                     }
-                    // Bersihkan param agar URL tidak lagi mengaku terfilter.
+                   
                     if (window.history.replaceState) {
                         window.history.replaceState({}, '', location.pathname);
                     }
@@ -160,7 +154,7 @@
 
             if (input) input.addEventListener('input', applySearch);
 
-            // Sorting: klik header ber-data-sort. Nilai diambil dari data-sort-* di <tr>.
+            
             var headers = table.querySelectorAll('th[data-sort]');
             headers.forEach(function (th) {
                 th.addEventListener('click', function () {
@@ -188,7 +182,7 @@
                 });
             });
 
-            // Unduh CSV: hanya baris yang sedang tampil, agar sejalan dengan pencarian.
+            
             if (csvBtn) {
                 csvBtn.addEventListener('click', function () {
                     var list = visibleRows();
@@ -211,7 +205,7 @@
                         lines.push(cells.join(';'));
                     });
 
-                    // BOM UTF-8 agar Excel membaca karakter dengan benar.
+                    
                     var blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
                     var url  = URL.createObjectURL(blob);
                     var a    = document.createElement('a');
@@ -224,12 +218,11 @@
                 });
             }
 
-            // Escape sel CSV: bungkus kutip ganda, gandakan kutip di dalamnya.
+            
             function csvCell(v) {
                 return '"' + String(v).replace(/"/g, '""') + '"';
             }
 
-            // Terapkan filter awal (mis. ?fokus=menipis) saat halaman dimuat.
             applySearch();
         })();
     </script>
